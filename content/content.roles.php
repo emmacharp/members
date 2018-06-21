@@ -140,12 +140,11 @@
 
 						$aTableBody[] = Widget::TableRow($columns);
 					} else {
+						$sections = explode(',', extension_Members::getSetting('section'));
 						$emptyCells = array();
 
-						if (!is_array(extension_Members::getSetting('section'))) {
-							$emptyCells[] = Widget::TableData(' ');
-						} else {
-							foreach (extension_Members::getSetting('section') as $section) {
+						if (count($roles) > 1) {
+							foreach ($sections as $section) {
 								$emptyCells[] = Widget::TableData(' ');
 							}
 						}
@@ -504,7 +503,7 @@
 
 					case 'delete-members':
 						foreach($checked as $role_id) {
-							RoleManager::delete($role_id, null, true);
+							RoleManager::delete($role_id, true);
 						}
 						redirect(extension_Members::baseURL() . 'roles/');
 
