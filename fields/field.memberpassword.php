@@ -259,8 +259,8 @@
 					->select(['entry_id'])
 					->from('tbl_entries_data_' . $this->get('id'))
 					->where(['entry_id' => $data['entry_id']])
-					->where(['DATE_FORMAT(expires, :date_format)'])
-					->setValue(':date_format', '%%Y-%%m-%%d %%H:%%i:%%s')
+					->where(['DATE_FORMAT(expires, :date_format)'] => ['>' => DateTimeObj::get('Y-m-d H:i:s', strtotime('now - '. $this->get('code_expiry')))])
+					->setValue(':date_format', '%Y-%m-%d %H:%i:%s')
 					->limit(1)
 					->execute()
 					->variable('entry_id');

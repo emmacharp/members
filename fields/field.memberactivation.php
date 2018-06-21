@@ -194,7 +194,7 @@
 				->from('tbl_entries_data_' . $this->get('id'))
 				->where(['entry_id' => $entry_id])
 				->where(['DATE_FORMAT(timestamp, :date_format)' => ['<' => DateTimeObj::get('Y-m-d H:i:s', strtotime('now + ' . $this->get('code_expiry')))]])
-				->setValue('date_format', '%%Y-%%m-%%d %%H:%%i:%%s')
+				->setValue('date_format', '%Y-%m-%d %H:%i:%s')
 				->limit(1)
 				->execute()
 				->next();
@@ -236,7 +236,7 @@
 				])
 				->where(['activated' => 'no'])
 				->where(['DATE_FORMAT(timestamp, :date_format)' => ['<' => DateTimeObj::get('Y-m-d H:i:s', strtotime('now - ' . $this->get('code_expiry')))]])
-				->setValue('date_format', '%%Y-%%m-%%d %%H:%%i:%%s');
+				->setValue('date_format', '%Y-%m-%d %H:%i:%s');
 
 			if ($entry_id) {
 				$q->where(['or' => [
