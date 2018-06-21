@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-	var notifier = jQuery('#header').find('.notifier');
+	var notifier = jQuery('#wrapper').find('.notifier');
 
 	Symphony.Language.add({
 		'Event updated at {$time}. <a href="{$new_url}" accesskey="c">Create another?</a> <a href="{$url}" accesskey="a">View all Events</a>': false,
