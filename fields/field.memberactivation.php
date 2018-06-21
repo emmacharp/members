@@ -149,7 +149,7 @@
 
 			// Generate a code
 			do {
-				$code = General::hash(uniqid(), 'sha1');
+				$code = hash('sha1', uniqid());
 				// $row = Symphony::Database()->fetchRow(0, "
 				// 	SELECT 1 FROM `tbl_entries_data_{$this->get('id')}` WHERE `code` = '{$code}'
 				// ");
@@ -190,7 +190,7 @@
 			// 	DateTimeObj::get('Y-m-d H:i:s', strtotime('now + ' . $this->get('code_expiry')))
 			// ));
 			$code = Symphony::Database()
-				->select(['code'])
+				->select(['code', 'timestamp'])
 				->from('tbl_entries_data_' . $this->get('id'))
 				->where(['entry_id' => $entry_id])
 				->where(['DATE_FORMAT(timestamp, :date_format)' => ['<' => DateTimeObj::get('Y-m-d H:i:s', strtotime('now + ' . $this->get('code_expiry')))]])
@@ -415,7 +415,7 @@
 				// If code is still live, displays when the code was generated.
 				if($this->isCodeActive($entry_id) !== false) {
 					$label->appendChild(
-						new XMLElement('span', __('Activation code %s', array('<code>' . $data['code'] . '</code>')), array('class' => 'frame'))
+						new XMLElement('span', __('Activation code %s', array('<code>' . $data['code'] . '</code>')), array('class' => 'frame help'))
 					);
 				}
 				// If the code is expired, displays 'Expired' w/the expiration timestamp.

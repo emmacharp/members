@@ -11,3 +11,7 @@
 .field-memberpassword .column {
 	margin-bottom: 0;
 }
+
+.field-memberactivation code {
+	text-transform: none;
+}

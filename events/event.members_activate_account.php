@@ -219,9 +219,10 @@
 			}
 
 			// Make sure we dont accidently use an expired code
-			$activation->purgeCodes();
+			// $activation->purgeCodes();
 
 			$code = $activation->isCodeActive($member_id);
+
 			if($code['code'] != $fields[$activation->get('element_name')]) {
 				$result->setAttribute('result', 'error');
 				$result->appendChild(
