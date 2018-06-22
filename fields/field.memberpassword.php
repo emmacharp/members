@@ -46,17 +46,6 @@
 	-------------------------------------------------------------------------*/
 
 		public static function createSettingsTable() {
-			// return Symphony::Database()->query("
-			// 	CREATE TABLE IF NOT EXISTS `tbl_fields_memberpassword` (
-			// 	  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			// 	  `field_id` INT(11) UNSIGNED NOT NULL,
-			// 	  `length` TINYINT(2) NOT NULL,
-			// 	  `strength` ENUM('weak', 'good', 'strong') NOT NULL,
-			// 	  `code_expiry` VARCHAR(50) NOT NULL,
-			// 	  PRIMARY KEY  (`id`),
-			// 	  UNIQUE KEY `field_id` (`field_id`)
-			// 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-			// ");
 			return Symphony::Database()
 				->create('tbl_fields_memberpassword')
 				->ifNotExists()
@@ -84,24 +73,6 @@
 		}
 
 		public function createTable(){
-			// return Symphony::Database()->query(
-			// 	"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-			// 	  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			// 	  `entry_id` INT(11) UNSIGNED NOT NULL,
-			// 	  `password` VARCHAR(150) DEFAULT NULL,
-			// 	  `recovery-code` VARCHAR(40) DEFAULT NULL,
-			// 	  `length` TINYINT(2) NOT NULL,
-			// 	  `strength` ENUM('weak', 'good', 'strong') NOT NULL,
-			// 	  `reset` ENUM('yes','no') default 'no',
-			// 	  `expires` DATETIME DEFAULT NULL,
-			// 	  PRIMARY KEY  (`id`),
-			// 	  KEY `entry_id` (`entry_id`),
-			// 	  KEY `length` (`length`),
-			// 	  KEY `password` (`password`),
-			// 	  KEY `expires` (`expires`),
-			// 	  UNIQUE KEY `recovery-code` (`recovery-code`)
-			// 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-			// ");
 			return Symphony::Database()
 				->create('tbl_entries_data_' . $this->get('id'))
 				->ifNotExists()
@@ -181,17 +152,6 @@
 				return null;
 			}
 
-			// $data = Symphony::Database()->fetchRow(0, sprintf("
-			// 		SELECT `entry_id`, `password`, `reset`
-			// 		FROM `tbl_entries_data_%d`
-			// 		WHERE %s
-			// 		LIMIT 1
-			// 	",
-			// 	$this->get('id'),
-			// 	is_null($member_id)
-			// 		? '1 = 1'
-			// 		: sprintf('`entry_id` = %d', Symphony::Database()->cleanValue($member_id))
-			// ));
 			$q = Symphony::Database()
 				->select(['entry_id', 'password', 'reset'])
 				->from('tbl_entries_data_' . $this->get('id'));
@@ -220,12 +180,6 @@
 					// Great! They match, but do we need to update the original password
 					// to a more secure algorithm now?
 					if(Cryptography::requiresMigration($data['password'])) {
-						// Symphony::Database()->update(array(
-						// 		'password' => $this->encodePassword($password)
-						// 	),
-						// 	'tbl_entries_data_' . $this->get('id'),
-						// 	sprintf('`entry_id` = %d', Symphony::Database()->cleanValue($member_id))
-						// );
 						Symphony::Database()
 							->update('tbl_entries_data_' . $this->get('id'))
 							->set([
@@ -244,17 +198,6 @@
 
 			// Check that if the password has been reset that it is still valid
 			if($valid && !empty($data['reset']) && $data['reset'] == 'yes') {
-				// $valid_id = Symphony::Database()->fetchVar('entry_id', 0, sprintf("
-				// 		SELECT `entry_id`
-				// 		FROM `tbl_entries_data_%d`
-				// 		WHERE `entry_id` = %d
-				// 		AND DATE_FORMAT(expires, '%%Y-%%m-%%d %%H:%%i:%%s') > '%s'
-				// 		LIMIT 1
-				// 	",
-				// 	$this->get('id'),
-				// 	$data['entry_id'],
-				// 	DateTimeObj::get('Y-m-d H:i:s', strtotime('now - '. $this->get('code_expiry')))
-				// ));
 				$valid_id = Symphony::Database()
 					->select(['entry_id'])
 					->from('tbl_entries_data_' . $this->get('id'))
@@ -277,7 +220,6 @@
 				// has now been used by the user.
 				else {
 					$fields = array('reset' => 'no', 'expires' => null);
-					// Symphony::Database()->update($fields, 'tbl_entries_data_' . $this->get('id'), ' `entry_id` = ' . $valid_id);
 					Symphony::Database()
 						->update('tbl_entries_data_' . $this->get('id'))
 						->set($fields)
@@ -366,15 +308,6 @@
 			}
 
 			try {
-				// $salt = Symphony::Database()->fetchVar('salt', 0, "
-				// 	SELECT
-				// 		f.salt
-				// 	FROM
-				// 		`tbl_fields_memberpassword` AS f
-				// 	WHERE
-				// 		f.field_id = '$field_id'
-				// 	LIMIT 1
-				// ");
 				$salt = Symphony::Database()
 					->select(['f.salt'])
 					->from('tbl_fields_memberpassword', 'f')
@@ -398,15 +331,6 @@
 		protected function rememberData($entry_id) {
 			$field_id = $this->get('id');
 
-			// return Symphony::Database()->fetchRow(0, "
-			// 	SELECT
-			// 		f.password, f.strength, f.length
-			// 	FROM
-			// 		`tbl_entries_data_{$field_id}` AS f
-			// 	WHERE
-			// 		f.entry_id = '{$entry_id}'
-			// 	LIMIT 1
-			// ");
 			return Symphony::Database()
 				->select(['f.password', 'f.strength', 'f.length'])
 				->from('tbl_entries_data_' . $field_id, 'f')
@@ -541,16 +465,6 @@
 
 			// Password
 			$password = $data['password'];
-			// $password_set = Symphony::Database()->fetchVar('id', 0, sprintf("
-			// 		SELECT
-			// 			f.id
-			// 		FROM
-			// 			`tbl_entries_data_% . , 'fd` AS f
-			// 		WHERE
-			// 			f.entry_id = %d
-			// 		LIMIT 1
-			// 	", $field_id, $entry_id
-			// ));
 			$password_set = Symphony::Database()
 				->select(['f.id'])
 				->from('tbl_entries_data_' . $field_id, 'f')

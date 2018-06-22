@@ -23,15 +23,6 @@
 	-------------------------------------------------------------------------*/
 
 		public static function createSettingsTable() {
-			// return Symphony::Database()->query("
-			// 	CREATE TABLE IF NOT EXISTS `tbl_fields_membertimezone` (
-			// 	  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			// 	  `field_id` INT(11) UNSIGNED NOT NULL,
-			// 	  `available_zones` VARCHAR(255) DEFAULT NULL,
-			// 	  PRIMARY KEY (`id`),
-			// 	  UNIQUE KEY `field_id` (`field_id`)
-			// 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-			// ");
 			return Symphony::Database()
 				->create('tbl_fields_membertimezone')
 				->ifNotExists()
@@ -69,13 +60,6 @@
 		 *  ie. Africa/Asmara
 		 */
 		public function getMemberTimezone($member_id) {
-			// return Symphony::Database()->fetchVar('value', 0, sprintf("
-			// 		SELECT `value`
-			// 		FROM `tbl_entries_data_%d`
-			// 		WHERE `entry_id` = '%s'
-			// 		LIMIT 1
-			// 	", $this->get('id'), $member_id
-			// ));
 			return Symphony::Database()
 				->select(['value'])
 				->from('tbl_entries_data_' . $this->get('id'))

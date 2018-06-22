@@ -54,10 +54,10 @@
 			$div->appendChild(Widget::Input('members[event]', 'activate-account', 'hidden'));
 
 			Administration::instance()->Page->Header->setAttribute('class', 'spaced-bottom');
-	        Administration::instance()->Page->Context->setAttribute('class', 'spaced-right');
-	        Administration::instance()->Page->Contents->setAttribute('class', 'centered-content');
-	        $actions = new XMLElement('div');
-	        $actions->setAttribute('class', 'actions');
+			Administration::instance()->Page->Context->setAttribute('class', 'spaced-right');
+			Administration::instance()->Page->Contents->setAttribute('class', 'centered-content');
+			$actions = new XMLElement('div');
+			$actions->setAttribute('class', 'actions');
 			$actions->appendChild(
 				Widget::SVGIconContainer(
 					'save',

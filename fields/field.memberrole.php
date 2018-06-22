@@ -36,15 +36,6 @@
 	-------------------------------------------------------------------------*/
 
 		public static function createSettingsTable() {
-			// return Symphony::Database()->query("
-			// 	CREATE TABLE IF NOT EXISTS `tbl_fields_memberrole` (
-			// 	  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			// 	  `field_id` INT(11) UNSIGNED NOT NULL,
-			// 	  `default_role` INT(11) UNSIGNED NOT NULL,
-			// 	  PRIMARY KEY (`id`),
-			// 	  UNIQUE KEY `field_id` (`field_id`)
-			// 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-			// ");
 			return Symphony::Database()
 				->create('tbl_fields_memberrole')
 				->ifNotExists()
@@ -67,15 +58,6 @@
 		}
 
 		public function createTable(){
-			// return Symphony::Database()->query(
-			// 	"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-			// 	  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			// 	  `entry_id` INT(11) UNSIGNED NOT NULL,
- 		// 		  `role_id` INT(11) UNSIGNED NOT NULL,
-			// 	  PRIMARY KEY  (`id`),
-			// 	  UNIQUE KEY `entry_id` (`entry_id`)
-			// 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-			// ");
 			return Symphony::Database()
 				->create('tbl_entries_data_' . $this->get('id'))
 				->ifNotExists()

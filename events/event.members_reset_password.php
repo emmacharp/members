@@ -53,10 +53,10 @@
 			$div->appendChild(Widget::Input('members[event]', 'reset-password', 'hidden'));
 
 			Administration::instance()->Page->Header->setAttribute('class', 'spaced-bottom');
-	        Administration::instance()->Page->Context->setAttribute('class', 'spaced-right');
-	        Administration::instance()->Page->Contents->setAttribute('class', 'centered-content');
-	        $actions = new XMLElement('div');
-	        $actions->setAttribute('class', 'actions');
+			Administration::instance()->Page->Context->setAttribute('class', 'spaced-right');
+			Administration::instance()->Page->Contents->setAttribute('class', 'centered-content');
+			$actions = new XMLElement('div');
+			$actions->setAttribute('class', 'actions');
 			$actions->appendChild(
 				Widget::SVGIconContainer(
 					'save',
@@ -192,13 +192,6 @@
 				return $result;
 			}
 
-			// $row = Symphony::Database()->fetchRow(0, sprintf("
-			// 		SELECT `entry_id`, `recovery-code`
-			// 		FROM tbl_entries_data_%d
-			// 		WHERE reset = 'yes'
-			// 		AND `recovery-code` = '%s'
-			// 	", $auth->get('id'), Symphony::Database()->cleanValue($fields[$this->driver->getMemberDriver()->section->getFieldHandle('authentication')]['recovery-code'])
-			// ));
 			$row = Symphony::Database()
 				->select(['entry_id', 'recovery-code'])
 				->from('tbl_entries_data_' . $auth->get('id'))
@@ -252,15 +245,6 @@
 				}
 
 				// Check that the recovery code is still valid and has not expired
-				// if(is_null(Symphony::Database()->fetchVar('entry_id', 0, sprintf("
-				// 		SELECT `entry_id`
-				// 		FROM `tbl_entries_data_%d`
-				// 		WHERE `entry_id` = %d
-				// 		AND DATE_FORMAT(expires, '%%Y-%%m-%%d %%H:%%i:%%s') > '%s'
-				// 		LIMIT 1
-				// 	",
-				// 	$auth->get('id'), $member_id, DateTimeObj::get('Y-m-d H:i:s', strtotime('now - '. $auth->get('code_expiry')))
-				// )))) {
 				if (is_null(
 					Symphony::Database()
 						->select(['entry_id'])

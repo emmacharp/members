@@ -215,7 +215,6 @@
 			// No entry data exists, create it!
 			else {
 				$data['entry_id'] = $member_id;
-				// Symphony::Database()->insert($data, 'tbl_entries_data_' . $auth->get('id'));
 				Symphony::Database()
 					->insert('tbl_entries_data_' . $auth->get('id'))
 					->values($data)

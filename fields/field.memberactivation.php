@@ -42,17 +42,6 @@
 	-------------------------------------------------------------------------*/
 
 		public static function createSettingsTable() {
-			// return Symphony::Database()->query("
-			// 	CREATE TABLE IF NOT EXISTS `tbl_fields_memberactivation` (
-			// 	  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			// 	  `field_id` INT(11) UNSIGNED NOT NULL,
-			// 	  `code_expiry` VARCHAR(50) NOT NULL,
-			// 	  `activation_role_id` INT(11) UNSIGNED NOT NULL,
-			// 	  `deny_login` ENUM('yes','no') NOT NULL default 'yes',
-			// 	  PRIMARY KEY  (`id`),
-			// 	  UNIQUE KEY `field_id` (`field_id`)
-			// 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-			// ");
 			return Symphony::Database()
 				->create('tbl_fields_memberactivation')
 				->ifNotExists()
@@ -81,18 +70,6 @@
 		}
 
 		public function createTable(){
-			// return Symphony::Database()->query(
-			// 	"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-			// 	  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			// 	  `entry_id` INT(11) UNSIGNED NOT NULL,
-			// 	  `activated` ENUM('yes','no') NOT NULL default 'no',
-			// 	  `timestamp` DATETIME DEFAULT NULL,
-			// 	  `code` VARCHAR(40) DEFAULT NULL,
-			// 	  PRIMARY KEY  (`id`),
-			// 	  KEY `entry_id` (`entry_id`),
-			// 	  UNIQUE KEY `code` (`code`)
-			// 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-			// ");
 			return Symphony::Database()
 				->create('tbl_entries_data_' . $this->get('id'))
 				->ifNotExists()
@@ -150,9 +127,6 @@
 			// Generate a code
 			do {
 				$code = hash('sha1', uniqid());
-				// $row = Symphony::Database()->fetchRow(0, "
-				// 	SELECT 1 FROM `tbl_entries_data_{$this->get('id')}` WHERE `code` = '{$code}'
-				// ");
 				$row = Symphony::Database()
 					->select(['*'])
 					->from('tbl_entries_data_' . $this->get('id'))
@@ -180,15 +154,6 @@
 		public function isCodeActive($entry_id) {
 
 			// First check if a code already exists
-			// $code = Symphony::Database()->fetchRow(0, sprintf("
-			// 	SELECT `code`, `timestamp` FROM `tbl_entries_data_%d`
-			// 	WHERE `entry_id` = %d
-			// 	AND DATE_FORMAT(timestamp, '%%Y-%%m-%%d %%H:%%i:%%s') < '%s'
-			// 	LIMIT 1",
- 		// 		$this->get('id'),
-			// 	$entry_id,
-			// 	DateTimeObj::get('Y-m-d H:i:s', strtotime('now + ' . $this->get('code_expiry')))
-			// ));
 			$code = Symphony::Database()
 				->select(['code', 'timestamp'])
 				->from('tbl_entries_data_' . $this->get('id'))
@@ -217,18 +182,6 @@
 		 * @return boolean
 		 */
 		public function purgeCodes($entry_id = null){
-			// $entry_id = $entry_id;
-
-			// return Symphony::Database()->update(
-			// 	array(
-			// 		'code' => null
-			// 	),
-			// 	"`tbl_entries_data_{$this->get('id')}`",
-			// 	sprintf("`activated` = 'no' AND DATE_FORMAT(timestamp, '%%Y-%%m-%%d %%H:%%i:%%s') < '%s' %s",
-			// 		DateTimeObj::get('Y-m-d H:i:s', strtotime('now - ' . $this->get('code_expiry'))),
-			// 		($entry_id ? " OR `entry_id` = $entry_id" : '')
-			// 	)
-			// );
 			$q = Symphony::Database()
 				->update('tbl_entries_data_' . $this->get('id'))
 				->set([
