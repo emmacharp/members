@@ -134,37 +134,17 @@
 				return null;
 			}
 
-			$usernameFields = (new FieldManager)
-				->select()
-				->sort('sortorder', 'asc')
-				->type(extension_Members::getFieldType('username'))
-				->execute()
-				->rows();
-			$member_id = null;
-
-			Symphony::Database()
-				->transaction(function (Database $db) use (&$member_id, $username, $usernameFields) {
-
-					foreach ($usernameFields as $key => $usernameField) {
-						$id = $db
-							->select(['entry_id'])
-							->from('tbl_entries_data_' . $usernameField->get('id'))
-							->where(['handle' => Lang::createHandle($username)])
-							->limit(1)
-							->execute()
-							->variable('entry_id');
-
-						if (!is_null($id)) $member_id = $id;
-					}
-
-				})
-				->execute()
-				->success();
-
 			// $member_id = Symphony::Database()->fetchVar('entry_id', 0, sprintf(
 			// 	"SELECT `entry_id` FROM `tbl_entries_data_%d` WHERE `handle` = '%s' LIMIT 1",
 			// 	$this->get('id'), Lang::createHandle($username)
 			// ));
+			$member_id = Symphony::Database()
+				->select(['entry_id'])
+				->from('tbl_entries_data_' . $this->get('id'))
+				->where(['handle' => Lang::createHandle($username)])
+				->limit(1)
+				->execute()
+				->variable('entry_id');
 
 			if(is_null($member_id)) {
 				extension_Members::$_errors[$this->get('element_name')] = array(
