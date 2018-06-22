@@ -5,15 +5,16 @@
 
 	Class contentExtensionMembersRoles extends AdministrationPage {
 
-		public static function baseURL(){
-			return SYMPHONY_URL . '/extension/members/roles/';
+		public function parseRolesContext(){
+			$base_url = SYMPHONY_URL . '/extension/members/roles/';
+			$current_url = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+			$params = explode('/', substr(str_replace($base_url, '', $current_url), 0, -1));
+
+			return array('action' => $params[0], 'id' => $params[1], 'flag' => $params[2]);
 		}
 
 		public function build(array $context = array()) {
-			$current_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-			$test = explode('/', substr(str_replace($this->baseURL(), '', $current_url), 0, -1));
-
-			parent::build($context = ['action' => $test[0], 'id' => $test[1], 'flag' => $test[2]]);
+			parent::build($context = $this->parseRolesContext());
 		}
 
 		public function __viewIndex() {
