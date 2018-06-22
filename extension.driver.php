@@ -1308,7 +1308,6 @@
 				}
 				else {
 					// No custom 403, just throw default 403
-					GenericExceptionHandler::$enabled = true;
 					Frontend::instance()->throwCustomError(
 						__('The page you have requested has restricted access permissions.'),
 						__('Forbidden'),
