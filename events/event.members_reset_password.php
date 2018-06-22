@@ -266,7 +266,7 @@
 						->select(['entry_id'])
 						->from('tbl_entries_data_' . $auth->get('id'))
 						->where(['entry_id' => $member_id])
-						->where(['DATE_FORMAT(expires, :date_format)' => ['>' => $auth->get('id'), $member_id, DateTimeObj::get('Y-m-d H:i:s', strtotime('now - '. $auth->get('code_expiry')))]])
+						->where(['DATE_FORMAT(expires, :date_format)' => ['>' => DateTimeObj::get('Y-m-d H:i:s', strtotime('now - '. $auth->get('code_expiry')))]])
 						->setValue('date_format', '%Y-%m-%d %H:%i:%s')
 						->limit(1)
 						->execute()

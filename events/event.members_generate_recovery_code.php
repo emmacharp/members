@@ -37,10 +37,10 @@
 				$div->appendChild(Widget::Input('members[event]', 'generate-recovery-code', 'hidden'));
 
 				Administration::instance()->Page->Header->setAttribute('class', 'spaced-bottom');
-		        Administration::instance()->Page->Context->setAttribute('class', 'spaced-right');
-		        Administration::instance()->Page->Contents->setAttribute('class', 'centered-content');
-		        $actions = new XMLElement('div');
-		        $actions->setAttribute('class', 'actions');
+				Administration::instance()->Page->Context->setAttribute('class', 'spaced-right');
+				Administration::instance()->Page->Contents->setAttribute('class', 'centered-content');
+				$actions = new XMLElement('div');
+				$actions->setAttribute('class', 'actions');
 				$actions->appendChild(
 					Widget::SVGIconContainer(
 						'save',
@@ -191,9 +191,9 @@
 			), $status);
 
 			// Set the Entry password to be reset and the current timestamp
-			$data['recovery-code'] = SHA1::hash($newPassword . $member_id);
+			$data['recovery-code'] = hash('sha1', $newPassword . $member_id);
 			$data['reset'] = 'yes';
-			$data['expires'] = DateTimeObj::get('Y-m-d H:i:s', time());
+			$data['expires'] = DateTimeObj::get('Y-m-d H:i:s', strtotime('now + '. $auth->get('code_expiry')));
 
 			// If the Member has entry data for the Authentication field, update it
 			if(array_key_exists((int)$auth->get('id'), $entry_data)) {
