@@ -27,7 +27,7 @@
 
 			$page_access = $data['roles_forbidden_pages']['page_access'];
 			if(is_array($page_access) && !empty($page_access)) {
-				foreach($page_access as $page_id){
+				foreach ($page_access as $page_id) {
 					// Symphony::Database()->insert(array(
 					// 		'page_id' => $page_id,
 					// 		'role_id' => $role_id
@@ -50,10 +50,10 @@
 				// $sql = "INSERT INTO `tbl_members_roles_event_permissions` VALUES ";
 
 				Symphony::Database()
-					->transaction(function (Database $db) use ($permissions) {
+					->transaction(function (Database $db) use ($role_id, $permissions) {
 
-						foreach($permissions as $event_handle => $p){
-							foreach($p as $action => $level) {
+						foreach ($permissions as $event_handle => $p) {
+							foreach ($p as $action => $level) {
 								// $sql .= sprintf("(null,%d,'%s','%s',%d),", $role_id, $event_handle, $action, $level);
 								$db
 									->insert('tbl_members_roles_event_permissions')
@@ -62,7 +62,9 @@
 										'event' => $event_handle,
 										'action' => $action,
 										'level' => $level,
-									]);
+									])
+									->execute()
+									->success();
 							}
 						}
 
