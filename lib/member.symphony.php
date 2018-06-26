@@ -123,11 +123,16 @@
 				return null;
 			}
 
-			// Check that if there's activiation, that this Member is activated.
+			// Check that if there's activation, that this Member is activated.
 			if(!is_null($this->section->getFieldHandle('activation'))) {
-				$entry = EntryManager::fetch($member_id, null, null, null, null, null, false, true, array($this->section->getFieldHandle('activation')));
+				$entry = (new EntryManager)
+					->select()
+					->entry($member_id)
+					->schema([$this->section->getFieldHandle('activation')])
+					->execute()
+					->next();
 
-				$isActivated = $entry[0]->getData($this->section->getField('activation')->get('id'), true)->activated == "yes";
+				$isActivated = $entry->getData($this->section->getField('activation')->get('id'), true)->activated == "yes";
 
 				// If we are denying login for non activated members, lets do so now
 				if ($this->section->getField('activation')->get('deny_login') == 'yes' && !$isActivated) {

@@ -112,13 +112,27 @@
 
 		public function fetchMemberFromID($member_id = null) {
 			if(!is_null($member_id)) {
-				$Member = EntryManager::fetch($member_id, null, null, null, null, null, false, true);
-				return $Member[0];
+				$Member = (new EntryManager)
+					->select()
+					->entry($member_id)
+					->section($this->section_id)
+					->includeAllFields()
+					->execute()
+					->next();
+
+				return $Member;
 			}
 
 			else if(self::$member_id !== 0) {
-				$Member = EntryManager::fetch(self::$member_id, null, null, null, null, null, false, true);
-				return $Member[0];
+				$Member = (new EntryManager)
+					->select()
+					->entry(self::$member_id)
+					->section($this->section_id)
+					->includeAllFields()
+					->execute()
+					->next();
+
+				return $Member;
 			}
 
 			return null;

@@ -426,9 +426,15 @@
 
 			if($mode === $modes->getPostdata) {
 				if(is_null($data) && !is_null($entry_id)) {
-					$entry = EntryManager::fetch($entry_id);
+					$entry = (new EntryManager)
+						->select()
+						->entry($entry_id)
+						->section($this->section_id)
+						->includeAllFields()
+						->execute()
+						->next();
 
-					$data = $entry[0]->getData($this->get('id'));
+					$data = $entry->getData($this->get('id'));
 					if(empty($data)) {
 						$data = $this->generateCode($entry_id);
 						$data['activated'] = 'no';

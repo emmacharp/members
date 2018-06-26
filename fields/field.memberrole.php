@@ -185,8 +185,12 @@
 			$activation_role_id = null;
 			$activation = extension_Members::getField('activation', $this->get('parent_section'));
 			if(!is_null($activation) && !is_null($entry_id)) {
-				$entry = EntryManager::fetch($entry_id);
-				$entry = $entry[0];
+				$entry = (new EntryManager)
+					->select()
+					->entry($entry_id)
+					->schema(['activation'])
+					->execute()
+					->next();
 
 				if($entry instanceof Entry && $entry->getData($activation->get('id'), true)->activated != 'yes') {
 					$activation_role_id = $activation->get('activation_role_id');

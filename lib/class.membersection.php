@@ -86,7 +86,13 @@ class MemberSection {
 	 * @param integer $section_id
 	 */
 	public function initialiseField($type, $section_id = null) {
-		$field = FieldManager::fetch(null, $section_id, 'ASC', 'sortorder', $type);
+		$field = (new FieldManager)
+			->select()
+			->section($section_id)
+			->sort('sortorder', 'asc')
+			->type($type)
+			->execute()
+			->rows();
 
 		if(!empty($field)) {
 			$field = current($field);
