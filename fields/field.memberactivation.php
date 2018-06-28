@@ -2,6 +2,7 @@
 
 	require_once TOOLKIT . '/fields/field.select.php';
 	require_once FACE . '/interface.importablefield.php';
+	require_once EXTENSIONS . '/members/lib/class.entryqueryactivationadapter.php';
 
 	/**
 	 * Activation field. If added to a Members section, it generates and stores
@@ -17,6 +18,7 @@
 
 		public function __construct(){
 			parent::__construct();
+			$this->entryQueryFieldAdapter = new EntryQueryActivationAdapter($this);
 			$this->_name = __('Member: Activation');
 			$this->_showassociation = false;
 		}
