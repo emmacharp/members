@@ -2,6 +2,7 @@
 
 	require_once FACE . '/interface.exportablefield.php';
 	require_once FACE . '/interface.importablefield.php';
+	require_once EXTENSIONS . '/members/lib/class.entryquerypasswordadapter.php';
 
 	Class fieldMemberPassword extends Field implements ExportableField, ImportableField {
 
@@ -19,6 +20,7 @@
 
 		public function __construct(){
 			parent::__construct();
+			$this->entryQueryFieldAdapter = new EntryQueryPasswordAdapter($this);
 			$this->_name = __('Member: Password');
 			$this->_required = true;
 

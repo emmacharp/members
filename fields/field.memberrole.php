@@ -2,6 +2,7 @@
 
 	require_once TOOLKIT . '/fields/field.select.php';
 	require_once(EXTENSIONS . '/members/lib/class.role.php');
+	require_once EXTENSIONS . '/members/lib/class.entryqueryroleadapter.php';
 
 	Class fieldMemberRole extends fieldSelect {
 
@@ -11,6 +12,7 @@
 
 		public function __construct(){
 			parent::__construct();
+			$this->entryQueryFieldAdapter = new EntryQueryRoleAdapter($this);
 			$this->_name = __('Member: Role');
 			$this->_showassociation = false;
 		}

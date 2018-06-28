@@ -12,6 +12,7 @@
 
 		public function __construct(){
 			parent::__construct();
+			$this->entryQueryFieldAdapter = new EntryQueryFieldAdapter($this);
 			$this->_name = __('Member: Username');
 			$this->set('required', 'yes');
 		}
