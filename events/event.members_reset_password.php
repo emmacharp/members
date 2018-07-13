@@ -307,7 +307,7 @@
 				// processRawFieldData will encode the user's new password with the current one
 				$status = Field::__OK__;
 				$data = $auth->processRawFieldData(array(
-					'password' => Symphony::Database()->cleanValue($fields[$auth->get('element_name')]['password'])
+					'password' => $fields[$auth->get('element_name')]['password']
 				), $status);
 
 				$data['recovery-code'] = null;
@@ -316,7 +316,12 @@
 
 				// Update the database with the new password, removing the recovery code and setting
 				// reset to no.
-				Symphony::Database()->update($data, 'tbl_entries_data_' . $auth->get('id'), ' `entry_id` = ' . $member_id);
+				Symphony::Database()
+					->update('tbl_entries_data_' . $auth->get('id'))
+					->set($data)
+					->where(['entry_id' => $member_id])
+					->execute()
+					->success();
 
 				/**
 				 * Fired just after a Member has reset their password.
@@ -343,7 +348,7 @@
 						'entry' => $entry,
 						'fields' => array(
 							$this->driver->getMemberDriver()->section->getFieldHandle('authentication') => array(
-								'password' => Symphony::Database()->cleanValue($fields[$auth->get('element_name')]['password'])
+								'password' => $fields[$auth->get('element_name')]['password']
 							)
 						)
 					));
