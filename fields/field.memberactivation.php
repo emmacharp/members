@@ -431,7 +431,7 @@
 					$entry = (new EntryManager)
 						->select()
 						->entry($entry_id)
-						->section($this->section_id)
+						->section($this->get('parent_section'))
 						->includeAllFields()
 						->execute()
 						->next();
