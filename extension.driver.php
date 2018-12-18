@@ -249,8 +249,6 @@
 					$db
 						->create('tbl_members_roles')
 						->ifNotExists()
-						->charset('utf8')
-						->collate('utf8_unicode_ci')
 						->fields([
 							'id' => [
 								'type' => 'int(11)',
@@ -279,8 +277,6 @@
 					$db
 						->create('tbl_members_roles_event_permissions')
 						->ifNotExists()
-						->charset('utf8')
-						->collate('utf8_unicode_ci')
 						->fields([
 							'id' => [
 								'type' => 'int(11)',
@@ -307,8 +303,6 @@
 					$db
 						->create('tbl_members_roles_forbidden_pages')
 						->ifNotExists()
-						->charset('utf8')
-						->collate('utf8_unicode_ci')
 						->fields([
 							'id' => [
 								'type' => 'int(11)',

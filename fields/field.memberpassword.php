@@ -51,8 +51,6 @@
 			return Symphony::Database()
 				->create('tbl_fields_memberpassword')
 				->ifNotExists()
-				->charset('utf8')
-				->collate('utf8_unicode_ci')
 				->fields([
 					'id' => [
 						'type' => 'int(11)',
@@ -78,8 +76,6 @@
 			return Symphony::Database()
 				->create('tbl_entries_data_' . $this->get('id'))
 				->ifNotExists()
-				->charset('utf8')
-				->collate('utf8_unicode_ci')
 				->fields([
 					'id' => [
 						'type' => 'int(11)',
