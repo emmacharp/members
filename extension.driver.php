@@ -1323,11 +1323,11 @@
 
 							// Get the ID's of the fields that may be used for Linking (Username/Email)
 							if(!is_null(extension_Members::getFieldHandle('identity'))) {
-								$field_ids[] = extension_Members::getField('identity')->get('id');
+								$field_ids[] = (int)extension_Members::getField('identity')->get('id');
 							}
 
 							if(!is_null(extension_Members::getFieldHandle('email'))) {
-								$field_ids[] = extension_Members::getField('email')->get('id');
+								$field_ids[] = (int)extension_Members::getField('email')->get('id');
 							}
 
 							// Query for the `field_id` of any linking fields that link to the members
@@ -1335,9 +1335,9 @@
 							$fields = Symphony::Database()
 								->select(['child_section_field_id'])
 								->from('tbl_sections_association')
-								->where(['parent_section_id' => $this->getMemberDriver()->getMember()->get('section_id')])
-								->where(['child_section_id' => $section_id])
-								->where(['parent_section_field_id' => ['in' => [$field_ids]]])
+								->where(['parent_section_id' => (int)$this->getMemberDriver()->getMember()->get('section_id')])
+								->where(['child_section_id' => (int)$section_id])
+								->where(['parent_section_field_id' => ['in' => $field_ids]])
 								->execute()
 								->column('child_section_field_id');
 
@@ -1358,8 +1358,11 @@
 										// this case, our logged in Member ID). This will return an array of all the
 										// linked entries, so we then just check that the current entry that is going to
 										// be updated is in that array
-										$member_id = $field->fetchAssociatedEntryIDs($this->getMemberDriver()->getMemberID());
-										$isOwner = in_array($entry_id, $member_id);
+										$member_id = $field->findRelatedEntries(
+											$this->getMemberDriver()->getMemberID(),
+											$field_id
+										);
+										$isOwner = $isOwner || in_array($entry_id, $member_id);
 									}
 								}
 							}
