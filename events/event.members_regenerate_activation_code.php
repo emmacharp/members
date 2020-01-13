@@ -41,18 +41,10 @@
 				Administration::instance()->Page->Contents->setAttribute('class', 'centered-content');
 				$actions = new XMLElement('div');
 				$actions->setAttribute('class', 'actions');
-				$actions->appendChild(
-					Widget::SVGIconContainer(
-						'save',
-						Widget::Input(
-							'action[save]',
-							__('Save Changes'),
-							'submit',
-							array('accesskey' => 's')
-						)
-					)
-				);
-				$actions->appendChild(Widget::SVGIcon('chevron'));
+				$saveBtn = new XMLElement('button', Widget::SVGIcon('save'));
+				$saveBtn->setAttributeArray(array('name' => 'action[save]', 'class' => 'button', 'title' => __('Save changes'), 'type' => 'submit', 'accesskey' => 's'));
+				$actions->appendChild($saveBtn);
+
 				$div->appendChild($actions);
 			}
 
