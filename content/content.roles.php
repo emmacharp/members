@@ -34,7 +34,7 @@
 			$this->appendSubheading(
 				__('Member Roles'),
 				Widget::Anchor(
-					Widget::SVGIcon('add') . '<span><span>' . __('Create New') . '</span></span>',
+					Widget::SVGIcon('add'),
 					Administration::instance()->getCurrentPageURL().'new/',
 					__('Create a Role'),
 					'create button',
@@ -167,8 +167,9 @@
 				'selectable'
 			);
 			$table->setAttribute('data-interactive', 'data-interactive');
+			$table->setAttribute('role', 'directory');
 
-			$this->Form->appendChild($table);
+			$this->Primary->appendChild($table);
 
 			$tableActions = new XMLElement('div');
 			$tableActions->setAttribute('class', 'actions');
@@ -184,7 +185,7 @@
 			}
 
 			$tableActions->appendChild(Widget::Apply($options));
-			$this->Form->appendChild($tableActions);
+			$this->Primary->appendChild($tableActions);
 		}
 
 		public function __viewNew() {
@@ -287,7 +288,7 @@
 			if(isset($this->_errors['name'])) $fieldset->appendChild(Widget::Error($label, $this->_errors['name']));
 			else $fieldset->appendChild($label);
 
-			$this->Form->appendChild($fieldset);
+			$this->Primary->appendChild($fieldset);
 
 			$events = EventManager::listAll();
 
@@ -391,7 +392,7 @@
 			);
 
 			$fieldset->appendChild($table);
-			$this->Form->appendChild($fieldset);
+			$this->Primary->appendChild($fieldset);
 
 			// Add Page Permissions [simple Deny/Allow]
 			$fieldset = new XMLElement('fieldset');
@@ -417,39 +418,30 @@
 
 			$label->appendChild(Widget::Select('fields[page_access][]', $options, array('multiple' => 'multiple')));
 			$fieldset->appendChild($label);
-			$this->Form->appendChild($fieldset);
+			$this->Primary->appendChild($fieldset);
 
 			$this->Header->setAttribute('class', 'spaced-bottom');
 	        $this->Context->setAttribute('class', 'spaced-right');
 	        $this->Contents->setAttribute('class', 'centered-content');
 			$div = new XMLElement('div');
 			$div->setAttribute('class', 'actions');
-			$div->appendChild(
-				Widget::SVGIconContainer(
-					'save',
-					Widget::Input(
-						'action[save]',
-						__('Save Changes'),
-						'submit',
-						array('accesskey' => 's')
-					)
-				)
-			);
+			$saveBtn = new XMLElement('button', Widget::SVGIcon('save'));
+			$saveBtn->setAttributeArray(array('name' => 'action[save]', 'class' => 'button', 'title' => __('Save changes'), 'type' => 'submit', 'accesskey' => 's'));
+			$div->appendChild($saveBtn);
 
 			if(!$isNew && $existing->get('id') != Role::PUBLIC_ROLE) {
-				$button = new XMLElement('button', __('Delete'));
-				$button->setAttributeArray(array('name' => 'action[delete]', 'class' => 'button confirm delete', 'title' => __('Delete this Role'), 'type' => 'submit', 'accesskey' => 'd'));
-				$div->appendChild(
-					Widget::SVGIconContainer(
-						'delete',
-						$button
-					)
-				);
+				$button = new XMLElement('button', Widget::SVGIcon('delete'));
+				$button->setAttributeArray([
+				    'name' => 'action[delete]',
+				    'class' => 'button confirm delete',
+				    'title' => __('Delete this role'),
+				    'type' => 'submit',
+				    'accesskey' => 'd'
+				]);
+				$div->appendChild($button);
 			}
 
-			$div->appendChild(Widget::SVGIcon('chevron'));
-
-			$this->Form->appendChild($div);
+			$this->Controls->appendChild($div);
 		}
 
 		public function __actionIndex() {
