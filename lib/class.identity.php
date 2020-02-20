@@ -76,10 +76,6 @@
 			$label = Widget::Label($this->get('label'));
 			if(!($this->get('required') == 'yes')) $label->appendChild(new XMLElement('i', __('Optional')));
 
-			$label->appendChild(Widget::Input(
-				"fields{$prefix}[{$handle}]{$postfix}", $data['value']
-			));
-
 			// Error?
 			if(!is_null($error)) {
 				$wrapper->appendChild(Widget::Error($label, $error));
@@ -87,6 +83,10 @@
 			else {
 				$wrapper->appendChild($label);
 			}
+			
+			$wrapper->appendChild(Widget::Input(
+				"fields{$prefix}[{$handle}]{$postfix}", $data['value']
+			));
 		}
 
 	/*-------------------------------------------------------------------------
