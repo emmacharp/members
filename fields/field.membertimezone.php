@@ -132,12 +132,11 @@
 				$groups[] = array('label' => ucwords(strtolower($zone)), 'options' => $options);
 			}
 
-			$label = new XMLElement('label', $this->get('label'));
-			$label->appendChild(Widget::Select(
+			$input = Widget::Select(
 				"fields{$prefix}[{$this->get('element_name')}]{$postfix}", $groups
-			));
+			);
 
-			return $label;
+			return $input;
 		}
 
 	/*-------------------------------------------------------------------------
@@ -203,7 +202,8 @@
 	-------------------------------------------------------------------------*/
 
 		public function displayPublishPanel(XMLElement &$wrapper, $data = null, $error = null, $prefix = null, $postfix = null, $entry_id = null) {
-			$label = $this->buildTZSelection($data, $prefix, $postfix);
+			$input = $this->buildTZSelection($data, $prefix, $postfix);
+			$label = Widget::Label($this->get('label'));
 
 			if(!is_null($error)) {
 				$wrapper->appendChild(Widget::Error($label, $error));
@@ -211,6 +211,8 @@
 			else {
 				$wrapper->appendChild($label);
 			}
+
+			$wrapper->appendChild($input);
 		}
 
 	/*-------------------------------------------------------------------------

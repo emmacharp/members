@@ -223,7 +223,7 @@
 			}
 
 			$label = Widget::Label($this->get('label'));
-			$label->appendChild(Widget::Select(
+			$wrapper->appendChild(Widget::Select(
 				'fields'.$prefix.'['.$this->get('element_name').']'.$postfix,
 				$options,
 				!is_null($activation_role_id) ? array('disabled' => 'disabled') : array())
@@ -242,17 +242,17 @@
 						__('Member will assume the role <strong>%s</strong> when activated.', array($default_role->get('name'))),
 						array('class' => 'help frame'))
 					);
-					$label->appendChild(
+					$wrapper->appendChild(
 						Widget::Input('fields'.$prefix.'['.$this->get('element_name').']'.$postfix, $default_role_id, 'hidden')
 					);
 				}
 			}
 
 			if(!is_null($error)) {
-				$wrapper->appendChild(Widget::Error($label, $error));
+				$wrapper->prependChild(Widget::Error($label, $error));
 			}
 			else {
-				$wrapper->appendChild($label);
+				$wrapper->prependChild($label);
 			}
 		}
 

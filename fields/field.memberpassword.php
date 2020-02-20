@@ -458,8 +458,13 @@
 			$field_id = $this->get('id');
 			$handle = $this->get('element_name');
 
-			$group = new XMLElement('div');
-			$group->setAttribute('class', 'two columns');
+			$wrapper->addClass('two columns');
+
+			$div_confirm = new XMLElement('div');
+			$div_confirm->setAttribute('class', 'column');
+
+			$div_pass = new XMLElement('div');
+			$div_pass->setAttribute('class', 'column');
 
 			// Password
 			$password = $data['password'];
@@ -472,55 +477,62 @@
 				->variable('id');
 
 			if(!is_null($password_set)) {
-				$this->displayPublishPassword(
-					$group, 'New Password', "{$prefix}[{$handle}][password]{$postfix}"
-				);
-				$this->displayPublishPassword(
-					$group, 'Confirm New Password', "{$prefix}[{$handle}][confirm]{$postfix}"
-				);
-
-				$group->appendChild(Widget::Input(
-					"fields{$prefix}[{$handle}][optional]{$postfix}", 'yes', 'hidden'
-				));
 
 				$help = new XMLElement('p');
 				$help->setAttribute('class', 'help');
 				$help->setValue(__('Leave new password field blank to keep the current password'));
 
+				$this->displayPublishPassword(
+					$div_pass, 'New Password', "{$prefix}[{$handle}][password]{$postfix}", $error, $help
+				);
+				$this->displayPublishPassword(
+					$div_confirm, 'Confirm New Password', "{$prefix}[{$handle}][confirm]{$postfix}", $error, $help
+				);
+
+				$wrapper->appendChild(Widget::Input(
+					"fields{$prefix}[{$handle}][optional]{$postfix}", 'yes', 'hidden'
+				));
 			}
 			else {
 				$this->displayPublishPassword(
-					$group, 'Password', "{$prefix}[{$handle}][password]{$postfix}"
+					$div_pass, 'Password', "{$prefix}[{$handle}][password]{$postfix}", $error
 				);
 				$this->displayPublishPassword(
-					$group, 'Confirm Password', "{$prefix}[{$handle}][confirm]{$postfix}"
+					$div_confirm, 'Confirm Password', "{$prefix}[{$handle}][confirm]{$postfix}", $error
 				);
+			}
+
+
+
+			$wrapper->appendChild($div_pass);
+			$wrapper->appendChild($div_confirm);
+		}
+
+		public function displayPublishPassword($wrapper, $title, $name, $error, $help = null) {
+			$required = ($this->get('required') == 'yes');
+
+
+			$label = Widget::Label(__($title));
+			if(!$required) $label->appendChild(new XMLElement('i', __('Optional')));
+
+			$input = Widget::Input("fields{$name}", null, 'password', array('autocomplete' => 'off'));
+			
+			if ($help) {
+				$label->appendChild($help);
 			}
 
 			// Error?
 			if(!is_null($error)) {
-				$group = Widget::Error($group, $error);
-				$wrapper->appendChild($group);
+				$label = Widget::Error($label, $error);
+				$wrapper->appendChild($label);
 			}
 			else {
-				$wrapper->appendChild($group);
-				if ($help) {
-					$wrapper->appendChild($help);
-				}
+				$wrapper->appendChild($label);
+
 			}
-		}
 
-		public function displayPublishPassword($wrapper, $title, $name) {
-			$required = ($this->get('required') == 'yes');
+			$wrapper->appendChild($input);
 
-			$label = Widget::Label(__($title));
-			$label->setAttribute('class', 'column');
-			if(!$required) $label->appendChild(new XMLElement('i', __('Optional')));
-
-			$input = Widget::Input("fields{$name}", null, 'password', array('autocomplete' => 'off'));
-
-			$label->appendChild($input);
-			$wrapper->appendChild($label);
 		}
 
 	/*-------------------------------------------------------------------------
